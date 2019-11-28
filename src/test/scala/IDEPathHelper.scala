@@ -5,15 +5,15 @@ import io.gatling.commons.util.PathHelper._
 object IDEPathHelper {
 
 	val gatlingConfUrl: Path = getClass.getClassLoader.getResource("gatling.conf")
-	val projectRootDir = gatlingConfUrl.ancestor(3)
+	val projectRootDir: Path = gatlingConfUrl.ancestor(3)
 
-	val mavenSourcesDirectory = projectRootDir / "src" / "test" / "scala"
-	val mavenResourcesDirectory = projectRootDir / "src" / "test" / "resources"
-	val mavenTargetDirectory = projectRootDir / "target"
-	val mavenBinariesDirectory = mavenTargetDirectory / "test-classes"
+	val mavenSourcesDirectory: Path = projectRootDir / "src" / "test" / "scala"
+	val mavenResourcesDirectory: Path = projectRootDir / "src" / "test" / "resources"
+	val mavenTargetDirectory: Path = projectRootDir / "target"
+	val mavenBinariesDirectory: Path = mavenTargetDirectory / "test-classes"
 
-	val resourcesDirectory = mavenResourcesDirectory
-	val recorderSimulationsDirectory = mavenSourcesDirectory
-	val resultsDirectory = mavenTargetDirectory / "gatling"
-	val recorderConfigFile = mavenResourcesDirectory / "recorder.conf"
+	val resourcesDirectory: Path = mavenResourcesDirectory
+	val recorderSimulationsDirectory: Path = mavenSourcesDirectory
+	val resultsDirectory: Path = mavenTargetDirectory / "gatling"
+	val recorderConfigFile: Path = mavenResourcesDirectory / "recorder.conf"
 }
