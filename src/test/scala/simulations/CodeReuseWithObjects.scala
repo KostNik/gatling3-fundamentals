@@ -11,16 +11,20 @@ class CodeReuseWithObjects extends Simulation {
   val httpConf: HttpProtocolBuilder = http.baseUrl("http://localhost:8080/app/")
     .header("Accept", "application/json")
 
-   def checkAllVideoGames: ChainBuilder = {
-    exec(http("Get all video games -1st call")
-      .get("videogames")
-      .check(status.is(200)))
+  def checkAllVideoGames: ChainBuilder = {
+    repeat(3) {
+      exec(http("Get all video games -1st call")
+        .get("videogames")
+        .check(status.is(200)))
+    }
   }
 
   def checkSpecificVideoGame: ChainBuilder = {
-    exec(http("Get specific game")
-      .get("videogames/1")
-      .check(status.in(200 to 210)))
+    repeat(5) {
+      exec(http("Get specific game")
+        .get("videogames/1")
+        .check(status.in(200 to 210)))
+    }
   }
 
   val scn: ScenarioBuilder = scenario("Code reuse")
