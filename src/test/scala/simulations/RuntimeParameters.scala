@@ -9,7 +9,7 @@ import io.gatling.http.protocol.HttpProtocolBuilder
 import scala.concurrent.duration._
 
 
-class FixedDurationLoadSimulation extends Simulation {
+class RuntimeParameters extends Simulation {
 
   val httpConf: HttpProtocolBuilder = http.baseUrl("http://localhost:8080/app/")
     .header("Accept", "application/json")
@@ -22,30 +22,19 @@ class FixedDurationLoadSimulation extends Simulation {
     )
   }
 
-  def getSpecificGame: ChainBuilder = {
-    exec(
-      http("Get specific game")
-        .get("videogames/2")
-        .check(status.is(200))
-    )
-  }
 
-  val scn: ScenarioBuilder = scenario("Fixed duration load simulation")
-    .forever() {
+  val scn: ScenarioBuilder = scenario("Get all video games")
+    .forever {
       exec(checkAllVideoGames)
-        .pause(2)
-        .exec(getSpecificGame)
-        .pause(3)
-        .exec(checkAllVideoGames)
     }
+
 
   setUp(
     scn.inject(
       nothingFor(5 seconds),
-      atOnceUsers(10),
-      rampUsers(50) during(30 seconds)
+      rampUsers(1) during (1 second)
     )
-  ).protocols(httpConf.inferHtmlResources)
+  ).protocols(httpConf)
     .maxDuration(30 seconds)
 
 }
