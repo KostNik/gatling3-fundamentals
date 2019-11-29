@@ -5,10 +5,9 @@ import io.gatling.core.scenario.Simulation
 import io.gatling.core.structure.ScenarioBuilder
 import io.gatling.http.Predef._
 import io.gatling.http.protocol.HttpProtocolBuilder
-
 import scala.concurrent.duration._
 
-class AddPauseTime extends Simulation {
+class CheckResponseCode extends Simulation {
 
   val httpConf: HttpProtocolBuilder = http.baseUrl("http://localhost:8080/app/")
     .header("Accept", "application/json")
@@ -16,15 +15,18 @@ class AddPauseTime extends Simulation {
   val scn: ScenarioBuilder = scenario("Video Game Db - 3 calls")
 
     .exec(http("Get all video games - 1st call")
-      .get("videogames"))
+      .get("videogames")
+      .check(status.is(400)))
     .pause(5)
 
     .exec(http("Get specific game")
-      .get("videogames/1"))
+      .get("videogames/1")
+      .check(status.in(200 to 210)))
     .pause(1, 20)
 
     .exec(http("Get all video games - 2st call")
-      .get("videogames"))
+      .get("videogames")
+      .check(status.not(404), status.not(500)))
     .pause(3000.milliseconds)
 
 
